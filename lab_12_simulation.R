@@ -8,3 +8,17 @@ generate_data = function(n,p) {
   responses = rnorm(n, 0, 1)
   return(list(covariates = covariates, responses = responses))
 }
+
+# 2b.
+model_select = function(covariates, responses, cutoff) {
+  temp.lm = lm(responses ~ covariates)
+  temp.coeffs = summary(temp.lm)$coefficients
+  red.ind = which(temp.coeffs[2:nrow(temp.coeffs),4] < cutoff)
+  if (length(red.ind) == 0 ){
+    return(c())
+  }
+  red.lm = lm(responses ~ covariates[,red.ind])
+  red.coeffs = as.vector(summary(red.lm)$coefficients[,4])
+  return(red.coeffs)
+}
+
