@@ -22,3 +22,15 @@ model_select = function(covariates, responses, cutoff) {
   return(red.coeffs)
 }
 
+# 2c.
+run_simulation = function(n_trials=100, n, p, cutoff=0.05) {
+  pvals = c() 
+  for (i in 1:n_trials) {
+    trial = generate_data(n, p)
+    pval = model_select(trial$covariates, trial$response, cutoff)
+    pvals = c(pvals, pval)
+    }
+  hist(pvals, xlim=c(0,1), cex.main = 0.7,
+       main = paste("Histogram of the p-values(n=",n,", p=",p,")", sep=""))
+  return(pvals)
+}
