@@ -23,14 +23,26 @@ model_select = function(covariates, responses, cutoff) {
 }
 
 # 2c.
+
+# 2d.
 run_simulation = function(n_trials=100, n, p, cutoff=0.05) {
   pvals = c() 
   for (i in 1:n_trials) {
     trial = generate_data(n, p)
     pval = model_select(trial$covariates, trial$response, cutoff)
     pvals = c(pvals, pval)
-    }
-  hist(pvals, xlim=c(0,1), cex.main = 0.7,
-       main = paste("Histogram of the p-values(n=",n,", p=",p,")", sep=""))
-  return(pvals)
+  }
+  file.name = paste(n,"|",p,".csv",sep="")
+  write.csv(pvals, file = file.name, row.names = FALSE)
+  return(file.name)
+}
+
+make_plot = function(datapath) {
+  pvals = read.csv(file = datapath)[,1]
+  n.str = strsplit(datapath, split="|", fixed=TRUE)[[1]][1]
+  p.str = strsplit(datapath, split="|", fixed=TRUE)[[1]][2]
+  n = as.numeric(n.str)
+  p = as.numeric(substr(p.str, 1, nchar(p.str)-4))
+  hist(pvals, xlim=c(0,1), cex.main = 0.7, breaks = 30, xlab = "p-value",
+       main = paste("Histogram of the p-values","\n(n=",n,", p=",p,")",sep=""))
 }
