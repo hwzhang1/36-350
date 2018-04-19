@@ -115,7 +115,7 @@ readLines("https://github.com/hwzhang1/36-350/commit/d96e2b5854e5f5895ce7f81bde4
 
 
 ```{r}
-readLines("https://github.com/hwzhang1/36-350/commit/4b3097036c225a9b3951e7d864299fc467ee2262.patch")
+readLines("https://github.com/hwzhang1/36-350/commit/70d60abf1a36d3034214bb5039932088097ce7f6.patch")
 ```
 
 ```{r,fig.height=9,fig.width=9}
@@ -127,7 +127,7 @@ for (i in 1:length(ns)) {
   n = ns [i]
   for (j in 1:length(ps)) {
     p = ps[j]
-    run_simulation(n=n, p=p) # set n_trials=100
+    run_simulation(n=n, p=p) # set default n_trials=100
   }
 }
 ```
@@ -136,7 +136,6 @@ for (i in 1:length(ns)) {
 No, it doesn't seem to be the case. Most p-values are below 0.2. So, the distributions are all right-skewed 
 
 And it seems that while keeping p fixed, the distributions of the p-values become more heavily right-skewed as n increases; while keeping n fixed, the distributions of the p-values become more heavily right-skewed as p increases.
-
 
 
 - **2d.** One problem with simulations is that they can take a long
@@ -148,8 +147,25 @@ And it seems that while keeping p fixed, the distributions of the p-values becom
     `datapath` and makes the plot.
 
 ```{r}
-# readLines("Enter the URL to relevant commit of lab_12_simulation.R")
+readLines("https://github.com/hwzhang1/36-350/commit/bce4c5b6f32a758ca8cd1c5c59fe7250a5bd293e.patch")
 ```
+
+
+```{r,fig.height=9,fig.width=9}
+ns = c(100,1000,10000)
+ps = c(10,20,50)
+
+par(mfrow=c(3,3))
+for (i in 1:length(ns)) {
+  n = ns [i]
+  for (j in 1:length(ps)) {
+    p = ps[j]
+    file.name = run_simulation(n=n, p=p) # set default n_trials=100, cutoff=0.05
+    make_plot(file.name)
+  }
+}
+```
+
 
 - **CHALLENGE** One potential solution to this problem of invalid
     p-values is data-splitting. You use part of the data to do model
